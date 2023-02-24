@@ -17,7 +17,7 @@ from botcds import *
 
 intents = discord.Intents.all()
 
-load_dotenv("D:/python/dc/inventory/dc.env")
+load_dotenv(path + "//dc.env")
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')  
