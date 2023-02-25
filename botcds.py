@@ -10,9 +10,7 @@ import variables as vr
 # pf = pd.read_csv(path + '//pf.csv')
 # ef = pd.read_csv(path + '//ef.csv', keep_default_na=False)
 
-with open(vr.path + '//target.json', 'r') as jsfile:
-    target = json.load(jsfile)
-jsfile.close()
+
 
 vbabuse = ['作为一个bot， 我想用塑料小鸭打爆你的狗头', '说慢点，我狗话不是很好' , '天晴了，雨停了，你就觉得你行了。', '你这种智商看20集智慧树都补不回来',
            '等我有钱了，我就带你去最好的神经病院。', '我真的很想帮你治疗，但我是一名家庭医生，而你是一个孤儿。', '等你死了，我直接坐飞机到你的坟头，疯狂地偷吃你的贡品',
@@ -74,26 +72,32 @@ async def pfcreator(message):
 async def fk(message):
 
     # Add the user name to a dictionary, describing the user being targeted and the number of times to be attacked
-    target = {message.content[4:]: 5}
+    vr.target = {message.content[4:]: 5}
     with open(vr.path + '//target.json', 'w') as jsfile:
-        json.dump(target, jsfile)
+        json.dump(vr.target, jsfile)
     jsfile.close()
 
-    await message.channel.send(list(target.keys())[0] + ' 我喊你一声你敢答应吗')
+    await message.channel.send(list(vr.target.keys())[0] + ' 我喊你一声你敢答应吗')
 
 
 #A function to verbal abuse a user
 async def attack(message):
-    global target, vbabuse
+    global vbabuse
 
-    user = list(target.keys())[0]
+    user = list(vr.target.keys())[0]
 
-    if target[user] == 0:
-        target = {'temp' : 0}
+    if vr.target[user] == 0:
+        vr.target = {'temp' : 0}
+        with open(vr.path + '//target.json', 'w') as jsfile:
+            json.dump(vr.target, jsfile)
+        jsfile.close()
         return
     else:
-        target[user] -= 1
-        await message.channel.send(list(target.keys())[0] + random.choice(vbabuse))
+        vr.target[user] -= 1
+        with open(vr.path + '//target.json', 'w') as jsfile:
+            json.dump(vr.target, jsfile)
+        jsfile.close()
+        await message.channel.send(list(vr.target.keys())[0] + random.choice(vbabuse))
 
 
 #A function to generate random number in a range
