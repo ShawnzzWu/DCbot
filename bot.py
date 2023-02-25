@@ -11,6 +11,7 @@ from botcds import *
 
 
 
+
 #############################
 #Replying Section
 #############################
@@ -23,11 +24,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')  
 BOT_CHANNEL = int(os.getenv(('DISCORD_BOTCHANNEL')))
 
-#Feedback resources
-path = 'D:\dcbot'
 
-pf = pd.read_csv(path + '\pf.csv')
-ef = pd.read_csv(path + '\ef.csv', keep_default_na=False)
 
 
 
@@ -81,16 +78,6 @@ async def command(message):
             if temp[0] == i[0]:
                 await i[3](message)
 
-        # if temp[0] == 'output':
-        #     await history_generator(message)
-        # elif temp[0] == 'pfcreate':
-        #     await pfcreator(message)
-        # elif temp[0] == 'r':
-        #     await rdpick(message)
-        # elif temp[0] == 'fk':
-        #     await fk(message)
-        # elif temp[0] == 'list':
-        #     await cdlst(message)
 
 
 
@@ -142,9 +129,9 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})')
 
 
-    # channel = client.get_channel(BOT_CHANNEL)  # Gets channel from internal cache
-    #
-    # await channel.send('芜湖 起飞!')
+    channel = client.get_channel(BOT_CHANNEL)  # Gets channel from internal cache
+
+    await channel.send('芜湖 起飞!')
 
     # members = '\n - '.join([member.name for member in guild.members])
     # print(f'Guild Members:\n - {members}')
