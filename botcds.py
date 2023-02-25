@@ -1,7 +1,7 @@
 import random
 import pandas as pd
 import json
-from variables import *
+import variables as vr
 
 
 #Feedback resources
@@ -10,7 +10,7 @@ from variables import *
 # pf = pd.read_csv(path + '//pf.csv')
 # ef = pd.read_csv(path + '//ef.csv', keep_default_na=False)
 
-with open(path + '//target.json', 'r') as jsfile:
+with open(vr.path + '//target.json', 'r') as jsfile:
     target = json.load(jsfile)
 jsfile.close()
 
@@ -40,34 +40,33 @@ async def history_generator(message):
                     df = pd.concat([df, history_df(msg.author, msg.created_at, msg.content)])
 
 
-        df.to_csv(path + '\dchistory.csv', encoding='utf_8_sig')
+        df.to_csv(vr.path + '\dchistory.csv', encoding='utf_8_sig')
         print('File generated successfully!')
 
 
 #A function to add or alter reply
 async def pfcreator(message):
-        global pf
 
         temp = message.content[1:].split()
         if len(temp) < 3:
             await message.channel.send('command pfcreate usage: [pfcreate <content should include> <content reply>')
 
-        if temp[1] not in pf[['include']].values:
+        if temp[1] not in vr.pf[['include']].values:
 
             try:
                 msg = pd.DataFrame({'include': [temp[1]], 'print': [temp[2]]})
 
-                pf = pd.concat([pf, msg]).reset_index()
+                pf = pd.concat([vr.pf, msg]).reset_index()
                 pf = pf[['include', 'print']]
 
-                pf.to_csv(path + '\pf.csv', encoding='utf_8_sig')
+                pf.to_csv(vr.path + '\pf.csv', encoding='utf_8_sig')
                 await message.channel.send('New record created')
             except:
                 await message.channel.send('Something is wrong')
         else:
-            pf['print'][pf['include'] == temp[1]] = temp[2]
-            pf = pf[['include', 'print']]
-            pf.to_csv(path + '\pf.csv', encoding='utf_8_sig')
+            vr.pf['print'][vr.pf['include'] == temp[1]] = temp[2]
+            pf = vr.pf[['include', 'print']]
+            pf.to_csv(vr.path + '\pf.csv', encoding='utf_8_sig')
             await message.channel.send('Record altered')
 
 
@@ -76,7 +75,7 @@ async def fk(message):
 
     # Add the user name to a dictionary, describing the user being targeted and the number of times to be attacked
     target = {message.content[4:]: 5}
-    with open(path + '//target.json', 'w') as jsfile:
+    with open(vr.path + '//target.json', 'w') as jsfile:
         json.dump(target, jsfile)
     jsfile.close()
 

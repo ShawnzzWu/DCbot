@@ -8,7 +8,7 @@ import chat_exporter
 # import random
 from dotenv import load_dotenv
 from botcds import *
-
+from variables import *
 
 
 
