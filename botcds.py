@@ -54,17 +54,17 @@ async def pfcreator(message):
             try:
                 msg = pd.DataFrame({'include': [temp[1]], 'print': [temp[2]]})
 
-                pf = pd.concat([vr.pf, msg]).reset_index()
-                pf = pf[['include', 'print']]
+                vr.pf = pd.concat([vr.pf, msg]).reset_index()
+                vr.pf = vr.pf[['include', 'print']]
 
-                pf.to_csv(vr.path + '\pf.csv', encoding='utf_8_sig')
+                vr.pf.to_csv(vr.path + '\pf.csv', encoding='utf_8_sig')
                 await message.channel.send('New record created')
             except:
                 await message.channel.send('Something is wrong')
         else:
             vr.pf['print'][vr.pf['include'] == temp[1]] = temp[2]
-            pf = vr.pf[['include', 'print']]
-            pf.to_csv(vr.path + '\pf.csv', encoding='utf_8_sig')
+            vr.pf = vr.pf[['include', 'print']]
+            vr.pf.to_csv(vr.path + '\pf.csv', encoding='utf_8_sig')
             await message.channel.send('Record altered')
 
 

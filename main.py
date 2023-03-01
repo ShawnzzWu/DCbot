@@ -9,7 +9,7 @@ import chat_exporter
 from dotenv import load_dotenv
 from botcds import *
 from variables import *
-
+import variables as vr
 
 
 #############################
@@ -54,25 +54,18 @@ async def embedded_feedback(message):
 #A function to detect if specific word is the context
 async def feedback(message):
     # print(message.content, pf[['include']].values, message.content in pf[['include']].values)
-    if message.content in pf[['include']].values:
-        index = pf[pf['include'] == message.content].index[0]
-        await message.channel.send(pf['print'].iloc[index])
+    if message.content in vr.pf[['include']].values:
+        index = vr.pf[vr.pf['include'] == message.content].index[0]
+        await message.channel.send(vr.pf['print'].iloc[index])
     else:
         await embedded_feedback(message)
 
 
 
 
-# async def poll(message):
-
-# async def poker(message):
-
 #A function to check the command and operate commands
 async def command(message):
         temp = message.content[1:].split()
-
-        global pf
-        global target
 
         for i in commandlst:
             if temp[0] == i[0]:
@@ -104,10 +97,11 @@ async def on_message(message):
         return
 
     #Detect if the user is being targeted by a verbal abuse
-    if str(message.author.id) == list(target.keys())[0][2: -1]:
+    if str(message.author.id) == list(vr.target.keys())[0][2: -1]:
         await attack(message)
+    else:
+        await reading(message)
 
-    await reading(message)
 
 
 @client.event
