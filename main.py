@@ -77,11 +77,13 @@ async def command(message):
 #A function to detect command or chat to reply
 async def reading(message):
 
-    if message.content[0] != '[' or len(message.content) <= 1:
-        await feedback(message)
-    else:
-        await command(message)
-
+    try:
+        if message.content[0] != '[' or len(message.content) <= 1:
+            await feedback(message)
+        else:
+            await command(message)
+    except:
+        pass
 
 
 
@@ -129,6 +131,11 @@ async def on_ready():
 
     # members = '\n - '.join([member.name for member in guild.members])
     # print(f'Guild Members:\n - {members}')
+
+# async def on_disconnect():
+#     channel = client.get_channel(BOT_CHANNEL)  # Gets channel from internal cache
+#
+#     await channel.send('溜了溜了')
 
 
 # @client.event

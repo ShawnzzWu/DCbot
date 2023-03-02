@@ -2,6 +2,7 @@ import random
 import pandas as pd
 import json
 import variables as vr
+from discord import FFmpegPCMAudio
 
 
 #Feedback resources
@@ -129,10 +130,37 @@ async def cdlst(message):
 
     await message.channel.send(menu)
 
+#Summon the bot into the voice channel
+async def botjoin(message):
+    if not message.author.voice.channel:
+        await message.channel.send("{} is not connected to a voice channel".format(message.author.name))
+        return
+    else:
+        channel = message.author.voice.channel
+        vr.voice_client = await channel.connect()
 
+#Let the bot leave the channel
+async def botleave(client):
+
+    if vr.voice_client:
+        await vr.voice_client.disconnect()
+    else:
+        vr.voice_client = None
+
+
+async def voiceplay(message):
+    content = message.content[3:]
+    print(vr.voice_path + '\\' + content + '.mp3')
+    # try:
+    await vr.voice_client.play(FFmpegPCMAudio(executable="ffmpeg.exe", source=vr.voice_path + '\\' + content + '.mp3'))
+    # except:
+    #     await message.channel.send('不存在的')
 
 #Help resources
 commandlst = [['fk', '语言攻击一个用户', 'usage: [fk <@some user>', fk],
               ['r' ,  '生成一个随机数', 'usage: [r <start num default 0> <end num>', rdpick],
               ['pfcreate', '添加一条关键词检测回复', 'usage: [pfcreate <content should include> <content reply>', pfcreator],
-              ['list' ,    '显示所有可用指令', 'usage: [list', cdlst]]
+              ['list' ,    '显示所有可用指令', 'usage: [list', cdlst],
+              ['join',    '召唤战斗机甲', 'usage: [join', botjoin],
+              ['leave', '战斗机甲撤退', 'usage: [leave', botleave],
+              ['v', '播放神秘音频', 'usage: [v <mp3 name>', voiceplay]]
