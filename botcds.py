@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import variables as vr
 from discord import FFmpegPCMAudio
-
+import os
 
 #Feedback resources
 # path = 'D:\dcbot'
@@ -130,6 +130,7 @@ async def cdlst(message):
 
     await message.channel.send(menu)
 
+
 #Summon the bot into the voice channel
 async def botjoin(message):
     if not message.author.voice.channel:
@@ -137,7 +138,10 @@ async def botjoin(message):
         return
     else:
         channel = message.author.voice.channel
-        vr.voice_client = await channel.connect()
+        if vr.voice_client:
+            await vr.voice_client.move_to(channel)
+        else:
+            vr.voice_client = await channel.connect()
 
 #Let the bot leave the channel
 async def botleave(client):
@@ -148,13 +152,38 @@ async def botleave(client):
         vr.voice_client = None
 
 
+#Play a audio file
 async def voiceplay(message):
+    if not vr.voice_client:
+        await botjoin(message)
+
     content = message.content[3:]
-    print(vr.voice_path + '\\' + content + '.mp3')
-    # try:
-    await vr.voice_client.play(FFmpegPCMAudio(executable="ffmpeg.exe", source=vr.voice_path + '\\' + content + '.mp3'))
-    # except:
-    #     await message.channel.send('不存在的')
+    file = vr.voice_path + '\\' + content + '.mp4'
+    if os.path.isfile(file):
+        try:
+            vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=file))
+        except:
+            await message.channel.send('不存在的')
+    else:
+        await message.channel.send('不存在的')
+
+
+#Stop the audio that is playing
+async def voicestop(message):
+
+    vr.voice_client.stop()
+    await message.channel.send("Voice stopped")
+
+
+#Pause or resume the audio that is playing
+async def voicepause(message):
+    print('paused')
+    if vr.voice_client.is_playing():
+        vr.voice_client.pause()
+        await message.channel.send("Voice paused")
+    else:
+        vr.voice_client.resume()
+        await message.channel.send("Voice resumed")
 
 #Help resources
 commandlst = [['fk', '语言攻击一个用户', 'usage: [fk <@some user>', fk],
@@ -163,4 +192,6 @@ commandlst = [['fk', '语言攻击一个用户', 'usage: [fk <@some user>', fk],
               ['list' ,    '显示所有可用指令', 'usage: [list', cdlst],
               ['join',    '召唤战斗机甲', 'usage: [join', botjoin],
               ['leave', '战斗机甲撤退', 'usage: [leave', botleave],
-              ['v', '播放神秘音频', 'usage: [v <mp3 name>', voiceplay]]
+              ['v', '播放神秘音频', 'usage: [v <mp3 name>', voiceplay],
+              ['s', '停止播放', 'usage: [s', voicestop],
+              ['p', '暂停或继续播放', 'usage: [p', voicepause]]
