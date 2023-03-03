@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import variables as vr
 from discord import FFmpegPCMAudio
+import YTB_Downloader as YTB
 import os
 
 #Feedback resources
@@ -157,15 +158,19 @@ async def voiceplay(message):
     if not vr.voice_client:
         await botjoin(message)
 
-    content = message.content[3:]
-    file = vr.voice_path + '\\' + content + '.mp4'
-    if os.path.isfile(file):
-        try:
-            vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=file))
-        except:
-            await message.channel.send('不存在的')
-    else:
-        await message.channel.send('不存在的')
+    url = message.content[3:]
+    # url = 'https://www.youtube.com/watch?v=OpKENhgud10'
+    # filename = await YTB.YTDLSource.from_url(url)
+    # print(filename)
+    vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=YTB.filename))
+    # file = vr.voice_path + '\\' + content + '.mp4'
+    # if os.path.isfile(file):
+    #
+    #     vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=file))
+    #
+    # else:
+    #     await message.channel.send('不存在的')
+
 
 
 #Stop the audio that is playing
