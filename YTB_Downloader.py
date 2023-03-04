@@ -41,6 +41,6 @@ ytdl_format_options = {
 #
 url = 'https://www.youtube.com/watch?v=OpKENhgud10'
 filename = YTDLSource.from_url(url)
-print(filename)
+# print(filename)
 # ydl = ytdl.YoutubeDL(ytdl_format_options)
 # ydl.download(['https://www.youtube.com/watch?v=OpKENhgud10'])

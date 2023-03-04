@@ -158,12 +158,13 @@ async def voiceplay(message):
     if not vr.voice_client:
         await botjoin(message)
 
-    url = message.content[3:]
+    content = message.content[3:]
     # url = 'https://www.youtube.com/watch?v=OpKENhgud10'
     # filename = await YTB.YTDLSource.from_url(url)
     # print(filename)
     # vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=YTB.filename))
     file = vr.voice_path + '\\' + content + '.mp4'
+    print(file)
     if os.path.isfile(file):
 
         vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=file))
