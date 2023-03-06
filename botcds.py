@@ -134,15 +134,17 @@ async def cdlst(message):
 
 #Summon the bot into the voice channel
 async def botjoin(message):
-    if not message.author.voice.channel:
-        await message.channel.send("{} is not connected to a voice channel".format(message.author.name))
-        return
-    else:
+
+    try:
         channel = message.author.voice.channel
-        if vr.voice_client:
-            await vr.voice_client.move_to(channel)
-        else:
+        if not vr.voice_client:
             vr.voice_client = await channel.connect()
+        elif vr.voice_client.channel != channel:
+            await vr.voice_client.move_to(channel)
+        return True
+    except:
+        await message.channel.send("{}? 你在哪呢？？".format(message.author.name))
+        return False
 
 #Let the bot leave the channel
 async def botleave(client):
@@ -155,24 +157,19 @@ async def botleave(client):
 
 #Play a audio file
 async def voiceplay(message):
-    if not vr.voice_client:
-        await botjoin(message)
 
-    channel = message.author.voice.channel
-    if vr.voice_client.channel != channel:
-        await vr.voice_client.move_to(channel)
+    if await botjoin(message):
 
-    content = message.content[3:]
+        content = message.content[3:]
 
-    file = vr.voice_path + '\\' + content + '.mp4'
-    print(file)
-    if os.path.isfile(file):
+        file = vr.voice_path + '\\' + content + '.mp4'
 
-        vr.voice_client.play(FFmpegPCMAudio(executable= vr.FFmpeg, source=file))
+        if os.path.isfile(file):
 
-    else:
-        await message.channel.send('不存在的')
+            vr.voice_client.play(FFmpegPCMAudio(executable=vr.FFmpeg, source=file))
 
+        else:
+            await message.channel.send('不存在的')
 
 
 #Stop the audio that is playing
