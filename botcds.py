@@ -151,8 +151,8 @@ async def botleave(client):
 
     if vr.voice_client:
         await vr.voice_client.disconnect()
-    else:
-        vr.voice_client = None
+
+    vr.voice_client = None
 
 
 #Play a audio file
