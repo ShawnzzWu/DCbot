@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import variables as vr
 from discord import FFmpegPCMAudio
-import YTB_Downloader as YTB
+# import YTB_Downloader as YTB
 import os
 
 #Feedback resources

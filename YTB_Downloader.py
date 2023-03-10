@@ -39,8 +39,10 @@ ytdl_format_options = {
     # 'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
 #
-url = 'https://www.youtube.com/watch?v=OpKENhgud10'
+# url = 'https://www.youtube.com/watch?v=OpKENhgud10'
+# url = 'https://www.youtube.com/watch?v=0TJQkKYXwxI'
+url = 'https://www.youtube.com/watch?v=of1uFqLSYcc'
 filename = YTDLSource.from_url(url)
 # print(filename)
 # ydl = ytdl.YoutubeDL(ytdl_format_options)
-# ydl.download(['https://www.youtube.com/watch?v=OpKENhgud10'])
+# ydl.download([url])
