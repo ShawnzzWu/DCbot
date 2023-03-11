@@ -1,4 +1,5 @@
 import random
+from tqdm import tqdm
 import pandas as pd
 import json
 import variables as vr
@@ -30,8 +31,14 @@ def history_df(author = '', create_at = '', content = ''):
 
 #A function to output the chat history of the channel that the command is sent
 async def history_generator(message):
+
         df = pd.DataFrame({'author': [], 'create_at': [], 'content': []})
-        async for msg in message.channel.history(limit = 50):
+
+        print('Downloading...')
+
+        history = [msg async for msg in message.channel.history(limit = 50000) if not msg.author.bot]
+
+        for msg in tqdm(history):
             if msg.author.bot:
                 continue
 
@@ -126,9 +133,9 @@ async def cdlst(message):
 
     menu = ''
 
-    for i in range(len(commandlst)):
-        menu = menu + '{:<30}{:<20}{:<20}\n'.format(commandlst[i][0], commandlst[i][1], commandlst[i][2])
-
+    for i in range(len(commandlst) - 1):
+        menu = menu + '{:<30}{:<50}{:<40}\n'.format(commandlst[i][0], commandlst[i][1], commandlst[i][2])
+    print(menu)
     await message.channel.send(menu)
 
 
@@ -198,4 +205,5 @@ commandlst = [['fk', '语言攻击一个用户', 'usage: [fk <@some user>', fk],
               ['leave', '战斗机甲撤退', 'usage: [leave', botleave],
               ['v', '播放神秘音频', 'usage: [v <mp3 name>', voiceplay],
               ['s', '停止播放', 'usage: [s', voicestop],
-              ['p', '暂停或继续播放', 'usage: [p', voicepause]]
+              ['p', '暂停或继续播放', 'usage: [p', voicepause],
+              ['pfhis', 'history', 'usage: [pfhis <num>', history_generator]]
